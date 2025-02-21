@@ -155,3 +155,108 @@ int main() {
 
     return 0;  
 }
+
+//BAI11 cach 3: edit lan 2
+#include <iostream>  
+#include <string>  
+using namespace std;  
+
+const int ROWS = 13; // Số hàng  
+const int COLS = 6;  // Số cột  
+
+// Hàm để hiển thị trạng thái chỗ ngồi  
+void displaySeats(char seats[ROWS][COLS]) {  
+    cout << "     A B C D E F\n"; // Cột ghế  
+    for (int i = 0; i < ROWS; i++) {  
+        cout << "Hang " << (i + 1) << ": "; // Hàng ghế  
+        for (int j = 0; j < COLS; j++) {  
+            cout << seats[i][j] << " "; // In trạng thái ghế  
+        }  
+        cout << endl;  
+    }  
+}  
+
+// Hàm để đặt chỗ ngồi  
+void bookSeat(char seats[ROWS][COLS]) {  
+    string ticketClass;  
+    int row;  
+    char col;  
+
+    cout << "Nhap loai ve (thuong gia, pho thong, tiet kiem): ";  
+    cin >> ticketClass;  
+
+    // Kiểm tra loại vé và xác định hàng ghế  
+    if (ticketClass == "thuong gia") {  
+        cout << "Chon hang (1-2): ";  
+    } else if (ticketClass == "pho thong") {  
+        cout << "Chon hang (3-7): ";  
+    } else if (ticketClass == "tiet kiem") {  
+        cout << "Chon hang (8-13): ";  
+    } else {  
+        cout << "Loai ve khong hop le!\n";  
+        return;  
+    }  
+
+    cin >> row;  
+    cout << "Chon cot (A-F): ";  
+    cin >> col;  
+
+    // Chuyển đổi cột từ ký tự thành chỉ số  
+    int colIndex = col - 'A';  
+    row -= 1; // Chuyển đổi sang chỉ số mảng  
+
+    // Kiểm tra hợp lệ  
+    if (row < 0 || row >= ROWS || colIndex < 0 || colIndex >= COLS) {  
+        cout << "Chon khong hop le. Vui long thu lai.\n";  
+    } else if (seats[row][colIndex] == 'x') {  
+        cout << "Cho da dat. Vui long chon cho khac.\n";  
+    } else {  
+        seats[row][colIndex] = 'x'; // Đặt chỗ đã chọn  
+        cout << "Dat cho thanh cong!\n";  
+    }  
+}  
+
+// Hàm chính  
+int main() {  
+    char seats[ROWS][COLS] = {   
+        {'*', '*', '*', '*', '*', '*'}, // Hàng 1 (Thương gia)  
+        {'*', '*', '*', '*', '*', '*'}, // Hàng 2 (Thương gia)  
+        {'*', '*', '*', '*', '*', '*'}, // Hàng 3 (Phổ thông)  
+        {'*', '*', '*', '*', '*', '*'}, // Hàng 4 (Phổ thông)  
+        {'*', '*', '*', '*', '*', '*'}, // Hàng 5 (Phổ thông)  
+        {'*', '*', '*', '*', '*', '*'}, // Hàng 6 (Phổ thông)  
+        {'*', '*', '*', '*', '*', '*'}, // Hàng 7 (Phổ thông)  
+        {'*', '*', '*', '*', '*', '*'}, // Hàng 8 (Tiết kiệm)  
+        {'*', '*', '*', '*', '*', '*'}, // Hàng 9 (Tiết kiệm)  
+        {'*', '*', '*', '*', '*', '*'}, // Hàng 10 (Tiết kiệm)  
+        {'*', '*', '*', '*', '*', '*'}, // Hàng 11 (Tiết kiệm)  
+        {'*', '*', '*', '*', '*', '*'}, // Hàng 12 (Tiết kiệm)  
+        {'*', '*', '*', '*', '*', '*'}  // Hàng 13 (Tiết kiệm)  
+    };  
+
+    int choice;  
+    do {  
+        cout << "\n1. Hien thi cho ngoi\n";  
+        cout << "2. Dat cho\n";  
+        cout << "3. Thoat\n";  
+        cout << "Chon: ";  
+        cin >> choice;  
+
+        switch (choice) {  
+            case 1:  
+                displaySeats(seats);  
+                break;  
+            case 2:  
+                bookSeat(seats);  
+                break;  
+            case 3:  
+                cout << "Thoat chuong trinh.\n";  
+                break;  
+            default:  
+                cout << "Lua chon khong hop le. Vui long thu lai.\n";  
+        }  
+    } while (choice != 3);  
+
+    return 0;  
+}
+
