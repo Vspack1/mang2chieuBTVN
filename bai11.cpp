@@ -260,3 +260,149 @@ int main() {
     return 0;  
 }
 
+//last edit
+
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
+const int ROWS = 13;
+const int COLS = 6;
+const string COLUMN_NAMES = "ABCDEF";
+
+// Khởi tạo sơ đồ ghế
+void initializeSeats(char seats[ROWS][COLS]) {
+    for(int i = 0; i < ROWS; i++) {
+        for(int j = 0; j < COLS; j++) {
+            seats[i][j] = '*';
+        }
+    }
+}
+
+// Hiển thị sơ đồ ghế
+void displaySeats(const char seats[ROWS][COLS]) {
+    cout << "\n  ";
+    for(char c : COLUMN_NAMES) {
+        cout << c << " ";
+    }
+    cout << "\n";
+
+    for(int i = 0; i < ROWS; i++) {
+        cout << setw(2) << i + 1 << " ";
+        for(int j = 0; j < COLS; j++) {
+            cout << seats[i][j] << " ";
+        }
+        cout << endl;
+    }
+}
+
+// Kiểm tra hàng ghế có phù hợp với loại vé không
+bool isValidRow(int row, int ticketType) {
+    switch(ticketType) {
+        case 1: return row >= 1 && row <= 2;    // Thương gia
+        case 2: return row >= 3 && row <= 7;    // Phổ thông
+        case 3: return row >= 8 && row <= 13;   // Tiết kiệm
+        default: return false;
+    }
+}
+
+// Đặt chỗ
+bool bookSeat(char seats[ROWS][COLS], int row, char col, int ticketType) {
+    if(row < 1 || row > ROWS) return false;
+    
+    int colIndex = COLUMN_NAMES.find(toupper(col));
+    if(colIndex == string::npos) return false;
+    
+    if(!isValidRow(row, ticketType)) return false;
+    
+    if(seats[row-1][colIndex] != '*') return false;
+    
+    seats[row-1][colIndex] = 'x';
+    return true;
+}
+
+// Hiển thị thống kê ghế trống
+void displayStats(const char seats[ROWS][COLS]) {
+    int business = 0, economy = 0, budget = 0;
+    
+    for(int i = 0; i < ROWS; i++) {
+        for(int j = 0; j < COLS; j++) {
+            if(seats[i][j] == '*') {
+                if(i < 2) business++;
+                else if(i < 7) economy++;
+                else budget++;
+            }
+        }
+    }
+    
+    cout << "\nSố ghế trống:\n";
+    cout << "- Thương gia: " << business << "/12\n";
+    cout << "- Phổ thông: " << economy << "/30\n";
+    cout << "- Tiết kiệm: " << budget << "/36\n";
+}
+
+int main() {
+    char seats[ROWS][COLS];
+    initializeSeats(seats);
+    
+    while(true) {
+        cout << "\n=== HỆ THỐNG ĐẶT CHỖ MÁY BAY ===\n";
+        cout << "1. Đặt chỗ\n";
+        cout << "2. Hiển thị sơ đồ chỗ ngồi\n";
+        cout << "3. Thoát\n";
+        cout << "Chọn chức năng (1-3): ";
+        
+        int choice;
+        cin >> choice;
+        
+        switch(choice) {
+            case 1: {
+                cout << "\nChọn loại vé:\n";
+                cout << "1. Thương gia (Hàng 1-2)\n";
+                cout << "2. Phổ thông (Hàng 3-7)\n";
+                cout << "3. Tiết kiệm (Hàng 8-13)\n";
+                cout << "Chọn (1-3): ";
+                
+                int ticketType;
+                cin >> ticketType;
+                
+                if(ticketType < 1 || ticketType > 3) {
+                    cout << "Loại vé không hợp lệ!\n";
+                    break;
+                }
+                
+                int row;
+                char col;
+                cout << "Nhập hàng (1-13): ";
+                cin >> row;
+                cout << "Nhập cột (A-F): ";
+                cin >> col;
+                
+                if(bookSeat(seats, row, col, ticketType)) {
+                    cout << "Đặt chỗ thành công!\n";
+                } else {
+                    cout << "Đặt chỗ thất bại! Vui lòng kiểm tra:\n";
+                    cout << "- Hàng phải phù hợp với loại vé\n";
+                    cout << "- Ghế phải còn trống\n";
+                    cout << "- Cột phải từ A đến F\n";
+                }
+                break;
+            }
+            case 2: {
+                displaySeats(seats);
+                displayStats(seats);
+                break;
+            }
+            case 3: {
+                cout << "Cảm ơn đã sử dụng dịch vụ!\n";
+                return 0;
+            }
+            default: {
+                cout << "Lựa chọn không hợp lệ!\n";
+            }
+        }
+    }
+    
+    return 0;
+}
+
